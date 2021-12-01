@@ -1,17 +1,22 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+	"time"
+
+	"github.com/diy0663/goblog-service/internal/routers"
+)
 
 func main() {
-	// 返回的Engine 实例里面 用了两个中间件 Logger(输出请求日志) , Recovery(异常捕获)
-	r := gin.Default()
 
-	// 定义一个路由
-	r.GET("/ping", func(c *gin.Context) {
-		// gin.H 是个map类型
-		c.JSON(200, gin.H{"message": "pong"})
-	})
-	// 启动后命令行会提示 Listening and serving HTTP on :8080
-	//  默认端口 8080
-	r.Run()
+	router := routers.NewRouter()
+	s := &http.Server{
+		Addr:           ":8080",
+		Handler:        router,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+	s.ListenAndServe()
+
 }
