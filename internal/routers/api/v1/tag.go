@@ -1,6 +1,9 @@
 package v1
 
 import (
+	"github.com/diy0663/goblog-service/internal/requests"
+	"github.com/diy0663/goblog-service/pkg/app"
+	"github.com/diy0663/goblog-service/pkg/errcode"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,7 +27,23 @@ func (t Tag) Get(c *gin.Context) {}
 // @Failure 400 {object} errcode.ErrorResp "请求错误"
 // @Failure 500 {object} errcode.ErrorResp "内部错误"
 // @Router /api/v1/tags [get]
-func (t Tag) List(c *gin.Context) {}
+func (t Tag) List(c *gin.Context) {
+	// 初始化一个响应对象
+	response := app.NewResponse(c)
+
+	valid, errs := requests.ValidTagListRequest(c)
+
+	if !valid {
+		//返回 false ,验证不通过
+		//	global.Logger.Errorf("ValidTagListRequest errs: %v", errs)
+		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
+		return
+	}
+
+	// 到这里暂时算正常返回, H is a shortcut for map[string]interface{}
+	response.ToResponse(gin.H{})
+
+}
 
 func (t Tag) Create(c *gin.Context) {}
 func (t Tag) Update(c *gin.Context) {}

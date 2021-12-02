@@ -4,6 +4,7 @@ import (
 	// 引入 docs,解决swagger页面 http://127.0.0.1:8080/swagger/index.html 访问后报错 Failed to load spec.
 	// 写完注解之后,使用 swag init 命令生成文档
 	_ "github.com/diy0663/goblog-service/docs"
+	"github.com/diy0663/goblog-service/internal/middleware"
 	v1 "github.com/diy0663/goblog-service/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -16,6 +17,9 @@ func NewRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 	//注册swagger的路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// 使用中间件处理语言包,方便后面验证报错的时候根据header头传的 locale 的取值来决定翻译为哪一类语言
+	// 从而支持 错误提示多语言的功能
+	r.Use(middleware.Translations())
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()
