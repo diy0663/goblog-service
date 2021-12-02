@@ -36,6 +36,10 @@ func init() {
 
 }
 
+// @title 博客系统
+// @version 1.0
+// @description  gin-api-study
+// @termsOfService gin-api-study
 func main() {
 
 	router := routers.NewRouter()

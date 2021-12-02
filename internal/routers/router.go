@@ -1,14 +1,21 @@
 package routers
 
 import (
+	// 引入 docs,解决swagger页面 http://127.0.0.1:8080/swagger/index.html 访问后报错 Failed to load spec.
+	// 写完注解之后,使用 swag init 命令生成文档
+	_ "github.com/diy0663/goblog-service/docs"
 	v1 "github.com/diy0663/goblog-service/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func NewRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	//注册swagger的路由
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()
