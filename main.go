@@ -8,7 +8,9 @@ import (
 	"github.com/diy0663/goblog-service/global"
 	"github.com/diy0663/goblog-service/internal/model"
 	"github.com/diy0663/goblog-service/internal/routers"
+	"github.com/diy0663/goblog-service/pkg/logger"
 	"github.com/diy0663/goblog-service/pkg/setting"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 // 自动初始化, 读取加载配置(Server,APP,database)
@@ -27,14 +29,21 @@ func init() {
 	}
 
 	// todo 初始化logger
+	err = setUpLogger()
+	if err != nil {
+		log.Fatalf("init.setupLogger err: %v", err)
+	}
+
 }
 
 func main() {
 
 	router := routers.NewRouter()
+
 	// 由于配置已经在init加载了,所以在这里直接读取配置,而不是写死
 	s := &http.Server{
-		Addr:           ":" + global.ServerSetting.HttpPort,
+		Addr: ":8080",
+		// Addr:           ":" + global.ServerSetting.HttpPort,
 		Handler:        router,
 		ReadTimeout:    global.ServerSetting.ReadTimeout * time.Second,
 		WriteTimeout:   global.ServerSetting.WriteTimeout * time.Second,
@@ -82,4 +91,19 @@ func setupDBEngine() error {
 	}
 	return nil
 
+}
+
+func setUpLogger() error {
+	var err error
+
+	//  lumberjack 作为日志库的 io.Writer，并且设置日志文件所允许的最大占用空间为 600MB、日志文件最大生存周期为 10 天，并且设置日志文件名的时间格式为本地时间
+	global.Logger = logger.NewLogger(&lumberjack.Logger{
+		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:   600,
+		MaxAge:    10,
+		LocalTime: true,
+	}, "", log.LstdFlags).WithCaller(2)
+
+	// 取调用一个方法生成一个经过配置的全局logger
+	return err
 }

@@ -1,6 +1,9 @@
 package global
 
-import "github.com/diy0663/goblog-service/pkg/setting"
+import (
+	"github.com/diy0663/goblog-service/pkg/logger"
+	"github.com/diy0663/goblog-service/pkg/setting"
+)
 
 // 全局配置
 
@@ -11,4 +14,6 @@ var (
 	AppSetting *setting.AppSettingS
 	// 数据库之类的配置
 	DatabaseSetting *setting.DatabaseSettingS
+
+	Logger *logger.Logger
 )

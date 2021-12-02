@@ -9,6 +9,7 @@ func NewRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+
 	tag := v1.NewTag()
 	article := v1.NewArticle()
 
