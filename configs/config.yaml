@@ -13,10 +13,11 @@ Database:
   DBType: mysql
   Username: root # 填写你的数据库账号
   Password: 123456 # 填写你的数据库密码
-  Host: 127.0.0.1:33066
+  Host: 127.0.0.1
+  Port: 33060
   DBName: blog_service
   TablePrefix: blog_
-  Charset: utf8
+  Charset: utf8mb4
   ParseTime: True
   MaxIdleConns: 10
   MaxOpenConns: 30

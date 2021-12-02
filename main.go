@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/diy0663/goblog-service/global"
+	"github.com/diy0663/goblog-service/internal/model"
 	"github.com/diy0663/goblog-service/internal/routers"
 	"github.com/diy0663/goblog-service/pkg/setting"
 )
@@ -13,10 +14,19 @@ import (
 // 自动初始化, 读取加载配置(Server,APP,database)
 // 程序执行顺序 : 全局变量初始化 =>init 方法 => main 方法
 func init() {
+	// 读取全局配置
 	err := setupSetting()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
+
+	// 得到一个经过配置了的gorm全局配置
+	err = setupDBEngine()
+	if err != nil {
+		log.Fatalf("init.setupDB err: %v", err)
+	}
+
+	// todo 初始化logger
 }
 
 func main() {
@@ -61,4 +71,15 @@ func setupSetting() error {
 	global.ServerSetting.WriteTimeout *= time.Second
 
 	return nil
+}
+
+func setupDBEngine() error {
+	var err error
+	// global.DBEngine 本身是个指针,执行成功之后会加载gorm对象到里面去,而且他是全局变量
+	global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
+	if err != nil {
+		return err
+	}
+	return nil
+
 }
