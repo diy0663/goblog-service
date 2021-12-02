@@ -21,17 +21,18 @@ type AppSettingS struct {
 }
 
 type DatabaseSettingS struct {
-	DBType       string
-	UserName     string
-	Password     string
-	Host         string
-	Port         string
-	DBName       string
-	TablePrefix  string
-	Charset      string
-	ParseTime    bool
-	MaxIdleConns int
-	MaxOpenConns int
+	DBType         string
+	UserName       string
+	Password       string
+	Host           string
+	Port           string
+	DBName         string
+	TablePrefix    string
+	Charset        string
+	ParseTime      bool
+	MaxIdleConns   int
+	MaxOpenConns   int
+	MaxLifeSeconds int
 }
 
 // 读取配置的方法,用了指针,所以返回值那里只需要error即可

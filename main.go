@@ -22,11 +22,11 @@ func init() {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
 
-	// 得到一个经过配置了的gorm全局配置
-	err = setupDBEngine()
-	if err != nil {
-		log.Fatalf("init.setupDB err: %v", err)
-	}
+	// todo 在这里就有问题得到一个经过配置了的gorm全局配置
+	// err = setupDBEngine()
+	// if err != nil {
+	// 	log.Fatalf("init.setupDB err: %v", err)
+	// }
 
 	// todo 初始化logger
 	err = setUpLogger()
@@ -89,6 +89,7 @@ func setupDBEngine() error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 
 }

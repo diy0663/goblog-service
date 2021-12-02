@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/diy0663/goblog-service/global"
 	"github.com/diy0663/goblog-service/pkg/setting"
@@ -34,7 +35,6 @@ func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err er
 			DatabaseSetting.Charset,
 		)})
 
-	// 根据配置选择开启debug模式
 	if global.ServerSetting.RunMode == "debug" {
 		db, err = gorm.Open(config, &gorm.Config{
 			// 开启调试SQL,Logger 可用来指定和配置 GORM 的调试器，例如说命令行打印 SQL 语句
@@ -47,6 +47,13 @@ func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err er
 	if err != nil {
 		return db, err
 	}
+
+	sqlDB, _ := db.DB()
+	sqlDB.SetMaxOpenConns(DatabaseSetting.MaxOpenConns)
+	sqlDB.SetMaxIdleConns(DatabaseSetting.MaxIdleConns)
+	// 每个链接的过期时间
+	sqlDB.SetConnMaxLifetime(time.Duration(DatabaseSetting.MaxLifeSeconds) * time.Second)
+	// 开启调试模式??
 
 	// todo  MaxIdleConns 和 MaxOpenConns 配置还没应用上
 	return db, nil
