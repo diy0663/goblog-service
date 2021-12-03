@@ -24,15 +24,23 @@ type TagSwagger struct {
 // sql查询,获取总数(传参放到自身结构体上面去了)
 func (t Tag) Count(db *gorm.DB) (int64, error) {
 	var count int64
+
+	db = getConditionDB(t, db)
+
+	if err := db.Model(&t).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+// 查列表, 跟 查列表总数总是要用到的一致查询条件放这里
+func getConditionDB(t Tag, db *gorm.DB) *gorm.DB {
 	if t.Name != "" {
 		db = db.Where("name = ? ", t.Name)
 	}
 	db = db.Where("state = ? ", t.State)
-
-	if err := db.Model(&t).Where("is_del = ? ", 0).Count(&count).Error; err != nil {
-		return 0, err
-	}
-	return count, nil
+	db = db.Where("is_del = ? ", 0)
+	return db
 }
 
 // todo 返回值为何是  []*Tag ???
@@ -40,15 +48,13 @@ func (t Tag) List(db *gorm.DB, pageOffset int, pageSize int) ([]*Tag, error) {
 	var tags []*Tag
 
 	var err error
+	db = getConditionDB(t, db)
 	if pageOffset >= 0 && pageSize > 0 {
 		db = db.Offset(pageOffset).Limit(pageSize)
 	}
-	if t.Name != "" {
-		db = db.Where("name = ? ", t.Name)
-	}
-	db = db.Where("state = ? ", t.State)
+
 	// 获取多条数据用 Find
-	if err = db.Where("is_del = ? ", 0).Find(&tags).Error; err != nil {
+	if err = db.Find(&tags).Error; err != nil {
 		return nil, err
 	}
 	return tags, nil
