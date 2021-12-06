@@ -11,7 +11,7 @@ type Setting struct {
 func NewSetting() (*Setting, error) {
 	vp := viper.New()
 	// 设置读取路径
-	vp.AddConfigPath("configs/")
+	vp.AddConfigPath("config/")
 	// 设置读取类型为yaml
 	vp.SetConfigType("yaml")
 	// 设置配置名称 ???
