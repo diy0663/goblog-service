@@ -24,6 +24,8 @@ type Model struct {
 //把创建gorm 的初始化实例方法放这里,外层把放数据库全局配置的结构体
 func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err error) {
 	// fmt.Println(DatabaseSetting)
+
+	// alter table `blog_tag` convert to character set utf8mb4 COLLATE utf8mb4_unicode_ci;
 	config := mysql.New(mysql.Config{
 		DSN: "root:123456@tcp(127.0.0.1:33066)/blog_service?charset=utf8&parseTime=True&loc=Local",
 		// todo 配置项这里要确保返回值是字符串
