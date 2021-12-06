@@ -6,7 +6,7 @@ func init() {
 	config.Add("database", config.StrMap{
 		"mysql": map[string]interface{}{
 			"host":         config.Env("DB_HOST", "127.0.0.1"),
-			"port":         config.Env("DB_PORT", "3306"),
+			"port":         config.Env("DB_PORT", "33066"),
 			"database":     config.Env("DB_DATABASE", ""),
 			"username":     config.Env("DB_USERNAME", ""),
 			"password":     config.Env("DB_PASSWORD", ""),
