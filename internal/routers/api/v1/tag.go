@@ -5,6 +5,7 @@ import (
 	"github.com/diy0663/goblog-service/internal/requests"
 	"github.com/diy0663/goblog-service/internal/service"
 	"github.com/diy0663/goblog-service/pkg/app"
+	"github.com/diy0663/goblog-service/pkg/convert"
 	"github.com/diy0663/goblog-service/pkg/errcode"
 	"github.com/gin-gonic/gin"
 )
@@ -110,12 +111,16 @@ func (t Tag) Create(c *gin.Context) {
 
 }
 func (t Tag) Update(c *gin.Context) {
-	param := requests.UpdateTagRequest{}
+	// curl -X PUT http://127.0.0.1:8080/api/v1/tags/3 -F state=0 -F modified_by=eddycjy
+	// id 是附加在url上的,需要通过 c.Param("id") 去获取
+	param := requests.UpdateTagRequest{
+		ID: uint64(convert.StrTo(c.Param("id")).MustUInt32()),
+	}
 	response := app.NewResponse(c)
 	valid, errs := requests.BindAndValid(c, &param)
 	if !valid {
 		//返回 false ,验证不通过
-		global.Logger.Errorf("ValidUpdateTagRequest errs: %v", errs)
+		//	global.Logger.Errorf("ValidUpdateTagRequest errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
 		return
 	}
@@ -135,7 +140,7 @@ func (t Tag) Delete(c *gin.Context) {
 	response := app.NewResponse(c)
 	valid, errs := requests.BindAndValid(c, &param)
 	if !valid {
-		global.Logger.Errorf("ValidDeleteTagRequest errs: %v", errs)
+		// global.Logger.Errorf("ValidDeleteTagRequest errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
 		return
 	}

@@ -35,17 +35,16 @@ func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err er
 	// fmt.Println(str)
 	// alter table `blog_tag` convert to character set utf8mb4 COLLATE utf8mb4_unicode_ci;
 	config := mysql.New(mysql.Config{
-		//DSN: "root:123456@tcp(127.0.0.1:33066)/blog_service?charset=utf8&parseTime=True&loc=Local",
-		DSN: DatabaseSetting.UserName + ":" + DatabaseSetting.Password + "@tcp(" + DatabaseSetting.Host + ":" + DatabaseSetting.Port + ")/" + DatabaseSetting.DBName + "?charset=utf8mb4&parseTime=True&loc=Local",
+
 		// todo 配置项这里要确保返回值是字符串
-		// DSN: fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=%v&parseTime=True&loc=Local",
-		// 	DatabaseSetting.UserName,
-		// 	DatabaseSetting.Password,
-		// 	DatabaseSetting.Host,
-		// 	DatabaseSetting.Port,
-		// 	DatabaseSetting.DBName,
-		// 	DatabaseSetting.Charset,
-		// ),
+		DSN: fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=%v&parseTime=True&loc=Local",
+			DatabaseSetting.UserName,
+			DatabaseSetting.Password,
+			DatabaseSetting.Host,
+			DatabaseSetting.Port,
+			DatabaseSetting.DBName,
+			DatabaseSetting.Charset,
+		),
 	})
 	// fmt.Println(config)
 

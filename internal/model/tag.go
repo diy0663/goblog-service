@@ -67,9 +67,15 @@ func (t Tag) Create(db *gorm.DB) error {
 
 }
 
-func (t Tag) Update(db *gorm.DB) error {
+func (t Tag) Update(db *gorm.DB, values interface{}) error {
 	// 更新多列 ?  这种用法是否有效需要验证
-	return db.Model(&t).Where("id = ? and is_del = ? ", t.ID, 0).Updates(t).Error
+	//	return db.Model(&t).Where("id = ? and is_del = ? ", t.ID, 0).Updates(t).Error
+	// GORM 中使用 struct 类型传入进行更新时，GORM 是不会对值为零值的字段进行变更
+	err := db.Model(t).Where("id =? and is_del = ? ", t.ID, 0).Updates(values).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (t Tag) Delete(db *gorm.DB) error {
