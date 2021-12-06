@@ -101,6 +101,8 @@ func setupSetting() error {
 		Expire: time.Duration(c.GetInt("jwt.expire")),
 	}
 	global.JwtSetting = &JwtSetting
+	//todo 时间单位转换
+	global.JwtSetting.Expire *= time.Second
 
 	DatabaseSetting := setting.DatabaseSettingS{
 		DBType:         "mysql",

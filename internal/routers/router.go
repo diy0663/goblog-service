@@ -25,6 +25,7 @@ func NewRouter() *gin.Engine {
 	article := v1.NewArticle()
 
 	apiv1 := r.Group("/api/v1")
+	apiv1.Use(middleware.JWT())
 	{
 		//新增
 		apiv1.POST("/tags", tag.Create)

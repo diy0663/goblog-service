@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/diy0663/goblog-service/global"
 	"github.com/diy0663/goblog-service/pkg/setting"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -23,16 +24,7 @@ type Model struct {
 
 //把创建gorm 的初始化实例方法放这里,外层把放数据库全局配置的结构体
 func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err error) {
-	// fmt.Println(DatabaseSetting)
-	// str := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=%v&parseTime=True&loc=Local",
-	// 	DatabaseSetting.UserName,
-	// 	DatabaseSetting.Password,
-	// 	DatabaseSetting.Host,
-	// 	DatabaseSetting.Port,
-	// 	DatabaseSetting.DBName,
-	// 	DatabaseSetting.Charset,
-	// )
-	// fmt.Println(str)
+
 	// alter table `blog_tag` convert to character set utf8mb4 COLLATE utf8mb4_unicode_ci;
 	config := mysql.New(mysql.Config{
 
@@ -46,21 +38,19 @@ func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err er
 			DatabaseSetting.Charset,
 		),
 	})
-	// fmt.Println(config)
 
-	db, err = gorm.Open(config, &gorm.Config{
-		Logger: gormlogger.Default.LogMode(gormlogger.Warn),
-	})
-	// if global.ServerSetting.RunMode == "debug" {
-	// 	db, err = gorm.Open(config, &gorm.Config{
-	// 		// 开启调试SQL,Logger 可用来指定和配置 GORM 的调试器，例如说命令行打印 SQL 语句
-	// 		Logger: gormlogger.Default.LogMode(gormlogger.Warn),
-	// 	})
-	// } else {
+	if global.ServerSetting.RunMode == "debug" {
+		db, err = gorm.Open(config, &gorm.Config{
+			// 开启调试SQL,Logger 可用来指定和配置 GORM 的调试器，例如说命令行打印 SQL 语句
+			Logger: gormlogger.Default.LogMode(gormlogger.Warn),
+		})
+	} else {
+		db, err = gorm.Open(config, &gorm.Config{
 
-	// }
+			//Logger: gormlogger.Default.LogMode(gormlogger.Warn),
+		})
+	}
 
-	fmt.Println(db)
 	if err != nil {
 		return db, err
 	}
@@ -77,7 +67,6 @@ func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err er
 	sqlDB.SetConnMaxLifetime(time.Duration(DatabaseSetting.MaxLifeSeconds) * time.Second)
 	// 开启调试模式??
 
-	// todo  MaxIdleConns 和 MaxOpenConns 配置还没应用上
 	return db, nil
 }
 
