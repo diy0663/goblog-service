@@ -1,8 +1,6 @@
 package requests
 
-import (
-	"github.com/gin-gonic/gin"
-)
+import "github.com/gin-gonic/gin"
 
 // 标签相关的自己的表单验证
 
@@ -30,7 +28,7 @@ type CreateTagRequest struct {
 }
 
 type UpdateTagRequest struct {
-	ID         uint32 `form:"id" binding:"required,gte=1"`
+	ID         uint64 `form:"id" binding:"required,gte=1"`
 	Name       string `form:"name" binding:"min=3,max=100"`
 	State      uint8  `form:"state" binding:"required,oneof=0 1"`
 	ModifiedBy string `form:"modified_by" binding:"required,min=3,max=100"`
@@ -38,12 +36,19 @@ type UpdateTagRequest struct {
 
 type DeleteTagRequest struct {
 	// gte代表 大于等于
-	ID uint32 `form:"id" binding:"required,gte=1"`
+	ID uint64 `form:"id" binding:"required,gte=1"`
 }
 
-// 用来验证请求tag列表的API 的参数是否正确
-func ValidTagListRequest(c *gin.Context) (valid bool, errs ValidErrors) {
-	param := new(TagListRequest)
+// // 用来验证请求tag列表的API 的参数是否正确
+// func ValidTagListRequest(c *gin.Context) (valid bool, errs ValidErrors) {
+// 	param := new(TagListRequest)
+
+// 	valid, errs = BindAndValid(c, param)
+// 	return
+// }
+
+func ValidTagCreateRequest(c *gin.Context) (valid bool, errs ValidErrors) {
+	param := new(CreateTagRequest)
 
 	valid, errs = BindAndValid(c, param)
 	return

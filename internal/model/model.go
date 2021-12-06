@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/diy0663/goblog-service/global"
 	"github.com/diy0663/goblog-service/pkg/setting"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -24,29 +23,42 @@ type Model struct {
 
 //把创建gorm 的初始化实例方法放这里,外层把放数据库全局配置的结构体
 func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err error) {
+	// fmt.Println(DatabaseSetting)
 	config := mysql.New(mysql.Config{
-		//DSN: "root:123456@tcp(127.0.0.1:33066)/goblog?charset=utf8&parseTime=True&loc=Local",
-		DSN: fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=%v&parseTime=True&loc=Local",
-			DatabaseSetting.UserName,
-			DatabaseSetting.Password,
-			DatabaseSetting.Host,
-			DatabaseSetting.Port,
-			DatabaseSetting.DBName,
-			DatabaseSetting.Charset,
-		)})
+		DSN: "root:123456@tcp(127.0.0.1:33066)/blog_service?charset=utf8&parseTime=True&loc=Local",
+		// todo 配置项这里要确保返回值是字符串
+		// DSN: fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=%v&parseTime=True&loc=Local",
+		// 	DatabaseSetting.UserName,
+		// 	DatabaseSetting.Password,
+		// 	DatabaseSetting.Host,
+		// 	DatabaseSetting.Port,
+		// 	DatabaseSetting.DBName,
+		// 	DatabaseSetting.Charset,
+		// )
+	})
+	// fmt.Println(config)
 
-	if global.ServerSetting.RunMode == "debug" {
-		db, err = gorm.Open(config, &gorm.Config{
-			// 开启调试SQL,Logger 可用来指定和配置 GORM 的调试器，例如说命令行打印 SQL 语句
-			Logger: gormlogger.Default.LogMode(gormlogger.Warn),
-		})
-	} else {
-		db, err = gorm.Open(config, &gorm.Config{})
-	}
+	db, err = gorm.Open(config, &gorm.Config{
+		Logger: gormlogger.Default.LogMode(gormlogger.Warn),
+	})
+	// if global.ServerSetting.RunMode == "debug" {
+	// 	db, err = gorm.Open(config, &gorm.Config{
+	// 		// 开启调试SQL,Logger 可用来指定和配置 GORM 的调试器，例如说命令行打印 SQL 语句
+	// 		Logger: gormlogger.Default.LogMode(gormlogger.Warn),
+	// 	})
+	// } else {
 
+	// }
+
+	fmt.Println(db)
 	if err != nil {
 		return db, err
 	}
+
+	// 在这里注册自定义的相关回调
+	// db.Callback().Create().Replace()
+	// db.Callback().Update().Register()
+	// db.Callback().Delete().Remove()
 
 	sqlDB, _ := db.DB()
 	sqlDB.SetMaxOpenConns(DatabaseSetting.MaxOpenConns)
@@ -58,3 +70,5 @@ func NewDBEngine(DatabaseSetting *setting.DatabaseSettingS) (db *gorm.DB, err er
 	// todo  MaxIdleConns 和 MaxOpenConns 配置还没应用上
 	return db, nil
 }
+
+// todo gorm 2.0 的自定义回调, 以及上面的 NewDBEngine 中注册自定义的回调还没有写

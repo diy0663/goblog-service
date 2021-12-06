@@ -64,6 +64,7 @@ func (t Tag) List(db *gorm.DB, pageOffset int, pageSize int) ([]*Tag, error) {
 // 插入一条数据
 func (t Tag) Create(db *gorm.DB) error {
 	return db.Create(&t).Error
+
 }
 
 func (t Tag) Update(db *gorm.DB) error {
