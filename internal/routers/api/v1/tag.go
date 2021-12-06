@@ -136,7 +136,9 @@ func (t Tag) Update(c *gin.Context) {
 
 }
 func (t Tag) Delete(c *gin.Context) {
-	param := requests.DeleteTagRequest{}
+	param := requests.DeleteTagRequest{
+		ID: uint64(convert.StrTo(c.Param("id")).MustUInt32()),
+	}
 	response := app.NewResponse(c)
 	valid, errs := requests.BindAndValid(c, &param)
 	if !valid {
