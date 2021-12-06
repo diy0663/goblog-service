@@ -28,16 +28,12 @@ func NewRouter() *gin.Engine {
 	{
 		//新增
 		apiv1.POST("/tags", tag.Create)
-		// 删除 todo 这种带 :idurl 在参数验证的时候要提前把id赋值上去
+		// 删除 todo 这种带 :id 的 url 在参数验证的时候要提前把id赋值上去
 		apiv1.DELETE("/tags/:id", tag.Delete)
 		//更新
 		apiv1.PUT("/tags/:id", tag.Update)
-		//更新局部
-		apiv1.PATCH("/tags/:id/state", tag.Update)
 		// 获取列表
 		apiv1.GET("/tags", tag.List)
-		// todo 获取详情
-		apiv1.GET("/tags/:id", tag.Detail)
 
 		apiv1.POST("/articles", article.Create)
 		apiv1.DELETE("/articles/:id", article.Delete)
