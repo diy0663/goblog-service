@@ -15,5 +15,7 @@ var (
 	// 数据库之类的配置
 	DatabaseSetting *setting.DatabaseSettingS
 
+	JwtSetting *setting.JWTSettingS
+
 	Logger *logger.Logger
 )

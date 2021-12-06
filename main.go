@@ -85,13 +85,6 @@ func setupSetting() error {
 
 	global.ServerSetting = &ServerSetting
 
-	// 对应setting进行操作
-	// setting.ReadSection 里面已经指定了配置文件,从里面读取  Server 区块内容,并回写到一个全局配置中(这个全局配置的结构跟Server区块一致)
-	// err = setting.ReadSection("Server", &global.ServerSetting)
-	// if err != nil {
-	// 	return err
-	// }
-
 	AppSetting := setting.AppSettingS{
 		DefaultPageSize: c.GetInt("app.default_page_size"),
 		MaxPageSize:     c.GetInt("app.max_page_size"),
@@ -101,10 +94,13 @@ func setupSetting() error {
 	}
 	global.AppSetting = &AppSetting
 
-	// err = setting.ReadSection("App", &global.AppSetting)
-	// if err != nil {
-	// 	return err
-	// }
+	// 全局的jwt配置读取
+	JwtSetting := setting.JWTSettingS{
+		Secret: c.GetString("jwt.secret"),
+		Issuer: c.GetString("jwt.issuer"),
+		Expire: time.Duration(c.GetInt("jwt.expire")),
+	}
+	global.JwtSetting = &JwtSetting
 
 	DatabaseSetting := setting.DatabaseSettingS{
 		DBType:         "mysql",
@@ -122,10 +118,6 @@ func setupSetting() error {
 	}
 	global.DatabaseSetting = &DatabaseSetting
 
-	// err = setting.ReadSection("Database", &global.DatabaseSetting)
-	// if err != nil {
-	// 	return err
-	// }
 	// 为配置里面的数字指定计量单位 秒
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second

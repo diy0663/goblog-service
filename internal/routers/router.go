@@ -43,5 +43,9 @@ func NewRouter() *gin.Engine {
 		apiv1.GET("/articles/:id", article.Detail)
 
 	}
+
+	// auth token相关路由
+	r.POST("/auth", v1.GetAuth)
+
 	return r
 }

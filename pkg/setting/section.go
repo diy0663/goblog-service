@@ -35,13 +35,8 @@ type DatabaseSettingS struct {
 	MaxLifeSeconds int
 }
 
-// 读取配置的方法,用了指针,所以返回值那里只需要error即可
-func (s *Setting) ReadSection(k string, v interface{}) error {
-	// UnmarshalKey 匹配某一个字段
-	err := s.vp.UnmarshalKey(k, v)
-	if err != nil {
-		return nil
-	}
-	return nil
-
+type JWTSettingS struct {
+	Secret string
+	Issuer string
+	Expire time.Duration
 }
