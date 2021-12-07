@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"log"
 	"testing"
+	"time"
 )
 
 // 测试反向解析token
@@ -20,3 +21,7 @@ func TestTokenParse(t *testing.T) {
 // 	//fmt.Println(*data)
 
 // }
+func TestTime(t *testing.T) {
+	// 2021-12-07 09:04:19.615794 +0800 CST m=+0.000
+	t.Log(time.Now())
+}
