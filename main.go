@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -22,25 +23,23 @@ func init() {
 
 	// 读取全局配置
 
-	// 从.env中读取全局变量
+	// 从.env中读取全局变量,// 把读取到的设置到全局变量里面去
 	config.Initialize()
 	err := setupSetting()
 	if err != nil {
 		log.Fatalf("init.setupSetting err: %v", err)
 	}
 
-	// 把读取到的设置到全局变量里面去
+	// // todo 初始化logger
+	err = setUpLogger()
+	if err != nil {
+		log.Fatalf("init.setupLogger err: %v", err)
+	}
 
 	// todo 在这里就有问题得到一个经过配置了的gorm全局配置
 	err = setupDBEngine()
 	if err != nil {
 		log.Fatalf("init.setupDB err: %v", err)
-	}
-
-	// // todo 初始化logger
-	err = setUpLogger()
-	if err != nil {
-		log.Fatalf("init.setupLogger err: %v", err)
 	}
 
 }
@@ -140,16 +139,15 @@ func setupDBEngine() error {
 }
 
 func setUpLogger() error {
-	var err error
-
-	//  lumberjack 作为日志库的 io.Writer，并且设置日志文件所允许的最大占用空间为 600MB、日志文件最大生存周期为 10 天，并且设置日志文件名的时间格式为本地时间
+	fileName := global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt
+	fmt.Println(fileName)
 	global.Logger = logger.NewLogger(&lumberjack.Logger{
-		Filename:  global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
-		MaxSize:   600,
+		Filename:  fileName,
+		MaxSize:   500,
 		MaxAge:    10,
 		LocalTime: true,
 	}, "", log.LstdFlags).WithCaller(2)
 
-	// 取调用一个方法生成一个经过配置的全局logger
-	return err
+	return nil
+
 }

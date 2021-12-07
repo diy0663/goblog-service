@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 		r.Use(gin.Recovery())
 	} else {
 		// 非调试模式就启用中间件记录访问日志
-		r.Use(middleware.AccessLog())
+		// r.Use(middleware.AccessLog())
 		// todo 非调试模式,调用自定义的 Recovery处理(邮件通知)
 		//r.Use(gin.Recovery())
 	}
@@ -54,8 +54,14 @@ func NewRouter() *gin.Engine {
 
 	}
 
+	r.Use(middleware.AccessLog())
+	{
+		r.POST("/auth", v1.GetAuth)
+
+	}
+
 	// auth token相关路由
-	r.POST("/auth", v1.GetAuth)
+	//r.POST("/auth", v1.GetAuth)
 
 	return r
 }
