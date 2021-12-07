@@ -16,16 +16,6 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-// var methodLimiters = limiter.NewMethodLimiter().AddBuckets(
-// 	limiter.LimiterBucketRule{
-// 		// 这个key 直接 对 uri进行匹配
-// 		Key:          "/auth",
-// 		FillInterval: time.Second,
-// 		// todo 这里暂时写死 10 , 意思是 10秒内对 /auth 进行 限流10次请求
-// 		Capacity: 10,
-// 		Quantum:  10,
-// 	},
-// )
 var methodLimiters = limiter.NewMethodLimiter().AddBuckets(
 	limiter.LimiterBucketRule{
 		Key: "/auth",
