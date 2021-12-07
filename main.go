@@ -35,6 +35,17 @@ func init() {
 		log.Fatalf("init.setupLogger err: %v", err)
 	}
 
+	// 配置zap
+	zapConfig := logger.Log{
+		FileName:   global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt,
+		MaxSize:    500,
+		MaxBackups: 100,
+		MaxAges:    10,
+		Compress:   false,
+		Level:      "",
+	}
+	_ = logger.InitZapLogger(&zapConfig)
+
 	// todo 在这里就有问题得到一个经过配置了的gorm全局配置
 	err = setupDBEngine()
 	if err != nil {
