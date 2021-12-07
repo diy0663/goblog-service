@@ -95,11 +95,12 @@ func setupSetting() error {
 	global.ServerSetting = &ServerSetting
 
 	AppSetting := setting.AppSettingS{
-		DefaultPageSize: c.GetInt("app.default_page_size"),
-		MaxPageSize:     c.GetInt("app.max_page_size"),
-		LogSavePath:     c.GetString("app.log_save_path"),
-		LogFileName:     c.GetString("app.log_file_name"),
-		LogFileExt:      c.GetString("app.log_file_ext"),
+		DefaultPageSize:       c.GetInt("app.default_page_size"),
+		MaxPageSize:           c.GetInt("app.max_page_size"),
+		LogSavePath:           c.GetString("app.log_save_path"),
+		LogFileName:           c.GetString("app.log_file_name"),
+		LogFileExt:            c.GetString("app.log_file_ext"),
+		DefaultContextTimeout: time.Duration(c.GetInt64("app.dfault_context_time_out")),
 	}
 	global.AppSetting = &AppSetting
 

@@ -3,6 +3,7 @@ package routers
 import (
 	// 引入 docs,解决swagger页面 http://127.0.0.1:8080/swagger/index.html 访问后报错 Failed to load spec.
 	// 写完注解之后,使用 swag init 命令生成文档
+
 	_ "github.com/diy0663/goblog-service/docs"
 	"github.com/diy0663/goblog-service/global"
 	"github.com/diy0663/goblog-service/internal/middleware"
@@ -29,6 +30,8 @@ func NewRouter() *gin.Engine {
 	// 使用中间件处理语言包,方便后面验证报错的时候根据header头传的 locale 的取值来决定翻译为哪一类语言
 	// 从而支持 错误提示多语言的功能
 	r.Use(middleware.Translations())
+	// 设置全局的超时中间件 ,60s
+	r.Use(middleware.ContextTimeout(global.AppSetting.DefaultContextTimeout))
 
 	tag := v1.NewTag()
 	article := v1.NewArticle()
