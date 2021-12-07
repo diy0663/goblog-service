@@ -31,6 +31,10 @@ func (t Tag) Get(c *gin.Context) {}
 // @Router /api/v1/tags [get]
 func (t Tag) List(c *gin.Context) {
 
+	//  app_info 中间件设置的值 app_version 在这里可以取到
+	// app_version, _ := c.Get("app_version")
+	// logger.ZapLog.Info("test_app_info_middleware:", zap.Any("app_version", app_version))
+
 	// 初始化空的列表请求 参数结构体
 	param := requests.TagListRequest{}
 
