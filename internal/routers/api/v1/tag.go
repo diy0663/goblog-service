@@ -6,7 +6,9 @@ import (
 	"github.com/diy0663/goblog-service/pkg/app"
 	"github.com/diy0663/goblog-service/pkg/convert"
 	"github.com/diy0663/goblog-service/pkg/errcode"
+	"github.com/diy0663/goblog-service/pkg/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // 感觉更像是控制器
@@ -46,7 +48,7 @@ func (t Tag) List(c *gin.Context) {
 
 	if !valid {
 		//返回 false ,验证不通过
-		//global.Logger.Errorf("ValidTagListRequest errs: %v", errs)
+		logger.ZapLog.Error("ValidTagListRequest errs:", zap.String("detail", errs.Error()))
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
 		return
 	}
@@ -65,13 +67,14 @@ func (t Tag) List(c *gin.Context) {
 	if err != nil {
 		// 求总数出错
 		// 写错误日志
-		//global.Logger.Errorf("svc.CountTag err: %v", err)
+
+		logger.ZapLog.Error("svc.CountTag err:", zap.String("detail", err.Error()))
 		response.ToErrorResponse(errcode.ErrorCountTagFail)
 	}
 	pager.TotalRows = int(TotalRows)
 	tags, err := svc.GetTagList(&param, &pager)
 	if err != nil {
-		//global.Logger.Errorf("svc.GetTagList err: %v", err)
+		logger.ZapLog.Error("svc.GetTagList err:", zap.String("detail", err.Error()))
 		response.ToErrorResponse(errcode.ErrorGetTagListFail)
 		return
 	}
@@ -92,7 +95,7 @@ func (t Tag) Create(c *gin.Context) {
 
 	if !valid {
 		//返回 false ,验证不通过
-		//	global.Logger.Errorf("ValidCreateTagRequest errs: %v", errs)
+		logger.ZapLog.Error("ValidCreateTagRequest err:", zap.String("detail", errs.Error()))
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
 		return
 	}
@@ -104,8 +107,7 @@ func (t Tag) Create(c *gin.Context) {
 	err := svc.CreateTag(&param)
 
 	if err != nil {
-
-		//global.Logger.Errorf("svc.CreateTag err: %v", err)
+		logger.ZapLog.Error("svc.CreateTag err:", zap.String("detail", err.Error()))
 		response.ToErrorResponse(errcode.ErrorCreateTagFail)
 		return
 	}
@@ -123,14 +125,14 @@ func (t Tag) Update(c *gin.Context) {
 	valid, errs := requests.BindAndValid(c, &param)
 	if !valid {
 		//返回 false ,验证不通过
-		//	global.Logger.Errorf("ValidUpdateTagRequest errs: %v", errs)
+		logger.ZapLog.Error("ValidUpdateTagRequest errs:", zap.String("detail", errs.Error()))
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
 		return
 	}
 	svc := service.New(c.Request.Context())
 	err := svc.UpdateTag(&param)
 	if err != nil {
-		//global.Logger.Errorf("svc.UpdateTag err: %v", err)
+		logger.ZapLog.Error("svc.UpdateTag err:", zap.String("detail", err.Error()))
 		response.ToErrorResponse(errcode.ErrorUpdateTagFail)
 		return
 	}
@@ -145,7 +147,7 @@ func (t Tag) Delete(c *gin.Context) {
 	response := app.NewResponse(c)
 	valid, errs := requests.BindAndValid(c, &param)
 	if !valid {
-		// global.Logger.Errorf("ValidDeleteTagRequest errs: %v", errs)
+		logger.ZapLog.Error("ValidDeleteTagRequest errs:", zap.String("detail", errs.Error()))
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
 		return
 	}
@@ -153,7 +155,8 @@ func (t Tag) Delete(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 	err := svc.DeleteTag(&param)
 	if err != nil {
-		//global.Logger.Errorf("svc.DeleteTag err: %v", err)
+
+		logger.ZapLog.Error("svc.DeleteTag err:", zap.String("detail", err.Error()))
 		response.ToErrorResponse(errcode.ErrorDeleteTagFail)
 		return
 	}

@@ -1,7 +1,6 @@
 package global
 
 import (
-	"github.com/diy0663/goblog-service/pkg/logger"
 	"github.com/diy0663/goblog-service/pkg/setting"
 )
 
@@ -17,5 +16,5 @@ var (
 
 	JwtSetting *setting.JWTSettingS
 
-	Logger *logger.Logger
+	//Logger *logger.Logger
 )

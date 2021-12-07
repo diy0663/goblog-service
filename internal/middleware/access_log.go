@@ -32,26 +32,8 @@ func AccessLog() gin.HandlerFunc {
 		beginTime := time.Now().Unix()
 		c.Next()
 
-		// fmt.Println(c.Request.PostForm.Encode()) 输出 app_key=eddycjy&app_secret=go-programming-tour-book
 		endTime := time.Now().Unix()
-		// fields := logger.Fields{
-		// 	"request":  c.Request.PostForm.Encode(),
-		// 	"response": bodyWriter.body.String(),
-		// }
-		//	fmt.Println(fields)
-		//
-		// global.Logger 是空~  fmt.Println(global.Logger)
-		// if global.Logger != nil {
-		// 	s := "access log: method: %s, status_code: %d, " +
-		// 		"begin_time: %d, end_time: %d"
-		// 		// 注意顺序, global.Logger 可能在这里用不了
-		// 	global.Logger.WithFields(fields).Infof(s,
-		// 		c.Request.Method,
-		// 		bodyWriter.Status(),
-		// 		beginTime,
-		// 		endTime,
-		// 	)
-		// }
+
 		logger.ZapLog.Info("access log:",
 			zap.String("path", c.Request.URL.Path),
 			zap.String("query", c.Request.URL.RawQuery),

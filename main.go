@@ -13,7 +13,6 @@ import (
 	"github.com/diy0663/goblog-service/internal/routers"
 	"github.com/diy0663/goblog-service/pkg/logger"
 	"github.com/diy0663/goblog-service/pkg/setting"
-	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 // 自动初始化, 读取加载配置(Server,APP,database)
@@ -30,10 +29,10 @@ func init() {
 	}
 
 	// // todo 初始化logger
-	err = setUpLogger()
-	if err != nil {
-		log.Fatalf("init.setupLogger err: %v", err)
-	}
+	// err = setUpLogger()
+	// if err != nil {
+	// 	log.Fatalf("init.setupLogger err: %v", err)
+	// }
 
 	// 配置zap
 	zapConfig := logger.Log{
@@ -144,22 +143,6 @@ func setupDBEngine() error {
 	if err != nil {
 		return err
 	}
-
-	return nil
-
-}
-
-func setUpLogger() error {
-	fileName := global.AppSetting.LogSavePath + "/" + global.AppSetting.LogFileName + global.AppSetting.LogFileExt
-
-	global.Logger = logger.NewLogger(&lumberjack.Logger{
-		Filename:  fileName,
-		MaxSize:   500,
-		MaxAge:    10,
-		LocalTime: true,
-	}, "", log.LstdFlags).WithCaller(2)
-	// 这里其实就有问题了!! global.Logger有问题
-	// fmt.Println(global.Logger)
 
 	return nil
 

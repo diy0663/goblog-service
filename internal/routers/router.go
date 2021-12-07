@@ -4,13 +4,37 @@ import (
 	// 引入 docs,解决swagger页面 http://127.0.0.1:8080/swagger/index.html 访问后报错 Failed to load spec.
 	// 写完注解之后,使用 swag init 命令生成文档
 
+	"time"
+
 	_ "github.com/diy0663/goblog-service/docs"
 	"github.com/diy0663/goblog-service/global"
 	"github.com/diy0663/goblog-service/internal/middleware"
 	v1 "github.com/diy0663/goblog-service/internal/routers/api/v1"
+	"github.com/diy0663/goblog-service/pkg/limiter"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+)
+
+// var methodLimiters = limiter.NewMethodLimiter().AddBuckets(
+// 	limiter.LimiterBucketRule{
+// 		// 这个key 直接 对 uri进行匹配
+// 		Key:          "/auth",
+// 		FillInterval: time.Second,
+// 		// todo 这里暂时写死 10 , 意思是 10秒内对 /auth 进行 限流10次请求
+// 		Capacity: 10,
+// 		Quantum:  10,
+// 	},
+// )
+var methodLimiters = limiter.NewMethodLimiter().AddBuckets(
+	limiter.LimiterBucketRule{
+		Key: "/auth",
+		// 间隔FillInterval 时间之后放  Quantum 个令牌
+		FillInterval: time.Second * 1,
+		// 容量
+		Capacity: 10,
+		Quantum:  10,
+	},
 )
 
 func NewRouter() *gin.Engine {
@@ -24,6 +48,9 @@ func NewRouter() *gin.Engine {
 		// todo 非调试模式,调用自定义的 Recovery处理(例如新增 邮件通知)
 		r.Use(middleware.Recovery())
 	}
+
+	// 限流处理,至于限不限制得到,就看上面定义的限流规则, 里面的key和请求的uri是否匹配上
+	r.Use(middleware.RateLimiter(methodLimiters))
 
 	//注册swagger的路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
