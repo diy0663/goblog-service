@@ -1,2 +1,0 @@
-{"level":"ERROR","time":"2021-12-07T21:34:23.875+0800","caller":"v1/tag.go:52","msg":"ValidTagListRequest errs:","detail":"Name为必填字段"}
-{"level":"INFO","time":"2021-12-07T21:34:23.876+0800","caller":"middleware/access_log.go:37","msg":"access log:","path":"/api/v1/tags","query":"","ip":"127.0.0.1","method":"GET","status_code":400,"begin_time":1638884063,"end_time":1638884063,"request":"","response":"{\"code\":10000001,\"details\":[\"Name为必填字段\"],\"msg\":\"入参错误\"}"}
