@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"github.com/diy0663/goblog-service/global"
 	"github.com/diy0663/goblog-service/internal/requests"
 	"github.com/diy0663/goblog-service/internal/service"
 	"github.com/diy0663/goblog-service/pkg/app"
@@ -43,7 +42,7 @@ func (t Tag) List(c *gin.Context) {
 
 	if !valid {
 		//返回 false ,验证不通过
-		global.Logger.Errorf("ValidTagListRequest errs: %v", errs)
+		//global.Logger.Errorf("ValidTagListRequest errs: %v", errs)
 		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Error()))
 		return
 	}
@@ -62,13 +61,13 @@ func (t Tag) List(c *gin.Context) {
 	if err != nil {
 		// 求总数出错
 		// 写错误日志
-		global.Logger.Errorf("svc.CountTag err: %v", err)
+		//global.Logger.Errorf("svc.CountTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorCountTagFail)
 	}
 	pager.TotalRows = int(TotalRows)
 	tags, err := svc.GetTagList(&param, &pager)
 	if err != nil {
-		global.Logger.Errorf("svc.GetTagList err: %v", err)
+		//global.Logger.Errorf("svc.GetTagList err: %v", err)
 		response.ToErrorResponse(errcode.ErrorGetTagListFail)
 		return
 	}
@@ -127,7 +126,7 @@ func (t Tag) Update(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 	err := svc.UpdateTag(&param)
 	if err != nil {
-		global.Logger.Errorf("svc.UpdateTag err: %v", err)
+		//global.Logger.Errorf("svc.UpdateTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorUpdateTagFail)
 		return
 	}
@@ -150,7 +149,7 @@ func (t Tag) Delete(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 	err := svc.DeleteTag(&param)
 	if err != nil {
-		global.Logger.Errorf("svc.DeleteTag err: %v", err)
+		//global.Logger.Errorf("svc.DeleteTag err: %v", err)
 		response.ToErrorResponse(errcode.ErrorDeleteTagFail)
 		return
 	}
