@@ -41,3 +41,14 @@ type JWTSettingS struct {
 	Issuer string
 	Expire time.Duration
 }
+
+type EmailSettingS struct {
+	Host     string
+	Port     int
+	UserName string
+	Password string
+	IsSSL    bool
+	From     string
+	// 这里用 []string 是为了预留可以一次发给多个邮箱
+	To []string
+}

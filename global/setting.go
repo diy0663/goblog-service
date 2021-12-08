@@ -17,4 +17,5 @@ var (
 	JwtSetting *setting.JWTSettingS
 
 	//Logger *logger.Logger
+	EmailSetting *setting.EmailSettingS
 )

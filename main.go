@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/diy0663/goblog-service/config"
@@ -112,6 +113,20 @@ func setupSetting() error {
 	global.JwtSetting = &JwtSetting
 	//todo 时间单位转换
 	global.JwtSetting.Expire *= time.Second
+
+	// 邮件发送配置初始化
+	EmailSetting := setting.EmailSettingS{
+		Host:     c.GetString("email.host"),
+		Port:     c.GetInt("email.port"),
+		UserName: c.GetString("email.username"),
+		Password: c.GetString("email.password"),
+		IsSSL:    c.GetBool("email.is_ssl"),
+		From:     c.GetString("email.from"),
+		// 支持多个邮件
+		To: strings.Split(c.GetString("email.to"), ","),
+	}
+
+	global.EmailSetting = &EmailSetting
 
 	DatabaseSetting := setting.DatabaseSettingS{
 		DBType:         "mysql",

@@ -155,7 +155,6 @@ func (t Tag) Delete(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 	err := svc.DeleteTag(&param)
 	if err != nil {
-
 		logger.ZapLog.Error("svc.DeleteTag err:", zap.String("detail", err.Error()))
 		response.ToErrorResponse(errcode.ErrorDeleteTagFail)
 		return
