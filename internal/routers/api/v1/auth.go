@@ -11,6 +11,8 @@ import (
 // 一个单独的对应post: /auth路由  的处理方法
 func GetAuth(c *gin.Context) {
 
+	//  手动验证panic 是否会被recovery中间件处理并且触发发邮件的动作
+	//panic("验证是否发了邮件")
 	// 校验参数
 	param := requests.AuthRequest{}
 	response := app.NewResponse(c)

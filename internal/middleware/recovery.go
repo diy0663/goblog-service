@@ -27,8 +27,9 @@ func Recovery() gin.HandlerFunc {
 		})
 
 		defer func() {
+			// 注意,在这里就不要再有panic了,特别是ogger.ZapLog.Panic
 			if err := recover(); err != nil {
-				logger.ZapLog.Panic("panic recover err", zap.Any("panic", err))
+				logger.ZapLog.Error("panic recover err", zap.Any("panic", err))
 
 				// 发邮件
 				err := defaultMailer.SendMail(global.EmailSetting.To,
